@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Orders</title>
+  <style>
+    /* Add your styling from index.html, if necessary */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    #orders-list {
+      list-style: none;
+      padding: 0;
+      margin: 20px auto;
+      max-width: 600px;
+    }
+    #orders-list li {
+      margin-bottom: 15px;
+    }
+    .cta-button {
+      background-color: #4e8cff;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+      display: inline-block;
+      margin-top: 15px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Your Order History</h2>
+  <ul id="orders-list"></ul>
+
+  <script>
+    async function fetchOrders() {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const res = await fetch('http://localhost:5000/api/orders', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) return;
+
+        const orders = await res.json();
+        if (!orders.length) {
+          document.getElementById('orders-list').innerHTML = '<li>No orders found.</li>';
+          return;
+        }
+
+        orders.forEach(order => {
+          const date = new Date(order.createdAt).toLocaleString();
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <strong>Order Total:</strong> $${order.total.toFixed(2)}<br>
+            <strong>Date:</strong> ${date}<br>
+            <strong>Items:</strong>
+            <ul>
+              ${order.items.map(i => `<li>${i.name} x ${i.quantity}</li>`).join('')}
+            </ul>
+          `;
+          document.getElementById('orders-list').appendChild(li);
+        });
+      } catch (err) {
+        console.error('Order fetch error:', err);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = "login.html"; // Redirect to login if not logged in
+      }
+
+      fetchOrders();
+    });
+  </script>
+</body>
+</html>

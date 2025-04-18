@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Signup</title>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #f1f5f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    form {
+      background-color: #1f2937;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 320px;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 0;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    button {
+      background-color: #4e8cff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3c6fd3;
+    }
+
+    #signupMessage {
+      text-align: center;
+      font-size: 14px;
+      min-height: 1em;
+    }
+  </style>
+</head>
+<body>
+  <form id="signupForm">
+    <h2>Create an Account</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button type="submit">Sign Up</button>
+    <div id="signupMessage"></div>
+  </form>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const messageBox = document.getElementById('signupMessage');
+
+      try {
+        const res = await fetch('http://localhost:5000/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+        messageBox.textContent = data.message;
+
+        if (res.ok) {
+          messageBox.style.color = '#22c55e'; // green
+	setTimeout(() => {
+    window.location.href = 'login.html';
+  }, 1500);
+        } else {
+          messageBox.style.color = '#f87171'; // red
+        }
+      } catch (err) {
+        messageBox.textContent = 'Could not connect to server.';
+        messageBox.style.color = '#f87171';
+      }
+    });
+  </script>
+</body>
+</html>

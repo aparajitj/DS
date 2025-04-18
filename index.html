@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Magnetic USB Cables</title>
+  <style>
+    .cart-content li div {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.cart-content li button {
+  background-color: #334155;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.cart-content li button:hover {
+  background-color: #475569;
+}
+
+#cart-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #1e293b;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 50px;
+  cursor: pointer;
+  z-index: 999;
+  font-size: 18px;
+}
+
+.cart-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.cart-content {
+  background-color: #1f2937;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  color: #f8fafc;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+}
+
+.cart-content ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.cart-content li {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-content button {
+  margin-right: 10px;
+}
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #0f172a;
+      color: #f1f5f9;
+    }
+
+    a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .cta-button {
+      background-color: #4e8cff;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+      display: inline-block;
+      margin-top: 15px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .cta-button:hover {
+      background-color: #3c6fd3;
+    }
+
+    header {
+      background-color: #1e293b;
+      color: white;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 10px;
+      font-size: 2.5em;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background-color: #111827;
+    }
+
+    .hero h2 {
+      font-size: 2em;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 1.2em;
+      max-width: 700px;
+      margin: 0 auto 25px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    .product {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 20px;
+      gap: 60px;
+      background-color: #1f2937;
+    }
+
+    .product img {
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.4);
+    }
+
+    .product-details {
+      max-width: 500px;
+    }
+
+    .product-details h3 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+      color: #f8fafc;
+    }
+
+    .product-details p,
+    .product-details ul {
+      font-size: 1em;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    #about {
+      background-color: #0f172a;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    #contact {
+      background-color: #1e293b;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    #about h2,
+    #contact h2 {
+      font-size: 1.8em;
+      margin-bottom: 15px;
+      color: #f8fafc;
+    }
+
+    #about p,
+    #contact p {
+      max-width: 700px;
+      margin: 0 auto;
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    footer {
+      background-color: #0f172a;
+      color: #94a3b8;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    footer a {
+      margin: 0 10px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+
+    .auth-buttons {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .auth-buttons button {
+      background-color: #334155;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .auth-buttons button:hover {
+      background-color: #475569;
+    }
+#welcome-banner {
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: #1e293b;
+  color: #f1f5f9;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 20px auto;
+  max-width: 400px;
+}
+
+  </style>
+</head>
+<body>
+<div id="welcome-banner" style="background:#1e293b; color:#f1f5f9; padding:12px; border-radius:8px; text-align:center; margin: 20px auto; max-width: 400px;">
+</div>
+
+  <!-- Auth buttons -->
+  <div class="auth-buttons" id="auth-section">
+    <!-- Filled by JS -->
+  </div>
+<!-- Cart Icon and View Orders Button (positioned together) -->
+<div style="position: fixed; top: 20px; right: 20px; display: flex; align-items: center; gap: 10px; z-index: 999;">
+  <!-- Cart Icon -->
+  <div id="cart-icon" onclick="toggleCart()" style="background-color: #1e293b; color: white; padding: 10px 15px; border-radius: 50px; cursor: pointer; font-size: 18px;">
+    🛒 <span id="cart-count">0</span>
+  </div>
+
+  <!-- View Orders Button -->
+<div style="position: fixed; top: 10px; right: 105px; display: flex; align-items: center; gap: 10px; z-index: 999;">
+
+  <a href="order-history.html" class="cta-button" style="padding: 10px 15px; white-space: nowrap;">
+    View Orders
+  </a>
+</div>
+</div>
+
+<!-- Cart Modal -->
+<div id="cart-modal" class="cart-modal">
+  <div class="cart-content">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <p id="cart-total">Total: $0.00</p>
+    <button class="cta-button" onclick="checkout()">Checkout</button>
+    <button class="cta-button" onclick="toggleCart()">Close</button>
+  </div>
+</div>
+
+
+  <section class="hero">
+    <h2>Fast, Versatile & Reliable</h2>
+    <p>Our 3-in-1 Magnetic USB Charging Cables simplify your digital life...</p>
+    <a href="#shop" class="cta-button">Explore Features</a>
+  </section>
+
+  <section class="product" id="shop">
+    <img src="images/Charging cable.jpeg" alt="3-in-1 Magnetic USB Charging Cable" />
+    <div class="product-details">
+      <h3>3-in-1 Magnetic USB Charging Cable</h3>
+      <p>Say goodbye to cable clutter. This cable features magnetic heads...</p>
+      <ul>
+        <li>✅ Fast charging with 3A current output</li>
+        <li>✅ Tangle-free nylon braided cord for durability</li>
+        <li>✅ LED indicator for easy use in the dark</li>
+        <li>✅ 360° rotating magnetic head for safe and easy plug-in</li>
+      </ul>
+      <p><strong>$19.99</strong> – Available in 1m and 2m lengths</p>
+      <button id="add-to-cart-btn" class="cta-button">Add to Cart</button>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>Why Choose Us?</h2>
+    <p>At ChargeMate, we specialize in smart charging accessories...</p>
+  </section>
+
+  <section id="contact">
+    <h2>Need Help?</h2>
+    <p>Our support team is here to assist you 24/7. Reach us at
+      <a href="mailto:support@chargemate.com">support@chargemate.com</a>.
+    </p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 ChargeMate</p>
+    <p>
+      <a href="#privacy">Privacy Policy</a> |
+      <a href="#terms">Terms of Service</a>
+    </p>
+  </footer>
+
+  <script>
+    const cart = [];
+
+    function addToCart(name, price) {
+      const existingItem = cart.find(item => item.name === name);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ name, price, quantity: 1 });
+      }
+      updateCartIcon();
+    }
+
+    function updateCartIcon() {
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById("cart-count").textContent = count;
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById("cart-modal");
+      modal.style.display = modal.style.display === "flex" ? "none" : "flex";
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartItems = document.getElementById("cart-items");
+      const cartTotal = document.getElementById("cart-total");
+      cartItems.innerHTML = "";
+
+      let total = 0;
+      cart.forEach((item, index) => {
+        total += item.price * item.quantity;
+        const li = document.createElement("li");
+        li.innerHTML = `
+          ${item.name} 
+          <div>
+            <button onclick="changeQuantity(${index}, -1)">➖</button>
+            <span style="margin: 0 10px;">${item.quantity}</span>
+            <button onclick="changeQuantity(${index}, 1)">➕</button>
+            = $${(item.price * item.quantity).toFixed(2)}
+            <button onclick="removeFromCart(${index})">❌</button>
+          </div>
+        `;
+        cartItems.appendChild(li);
+      });
+
+      cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    function changeQuantity(index, delta) {
+      cart[index].quantity += delta;
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
+      renderCart();
+      updateCartIcon();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+      updateCartIcon();
+    }
+
+    function checkout() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("⚠️ You must be logged in to checkout.");
+        return;
+      }
+
+      fetch("http://localhost:5000/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ items: cart })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message) {
+          alert("✅ Order placed successfully!");
+          cart.length = 0;
+          renderCart();
+          updateCartIcon();
+          toggleCart();
+        } else {
+          alert("❌ Checkout failed.");
+        }
+      })
+      .catch(error => {
+        console.error("Checkout error:", error);
+        alert("❌ Something went wrong!");
+      });
+    }
+
+    // Dynamic auth section rendering
+    function updateAuthUI() {
+      const authSection = document.getElementById("auth-section");
+      authSection.innerHTML = "";
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        const logoutBtn = document.createElement("button");
+        logoutBtn.textContent = "Logout";
+        logoutBtn.onclick = () => {
+          localStorage.removeItem("token");
+          alert("👋 Logged out!");
+          updateAuthUI();
+        };
+        authSection.appendChild(logoutBtn);
+      } else {
+        const loginBtn = document.createElement("button");
+        loginBtn.textContent = "Login";
+        loginBtn.onclick = () => window.location.href = "login.html";
+
+        const signupBtn = document.createElement("button");
+        signupBtn.textContent = "Signup";
+        signupBtn.onclick = () => window.location.href = "signup.html";
+
+        authSection.appendChild(loginBtn);
+        authSection.appendChild(signupBtn);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("add-to-cart-btn")
+        .addEventListener("click", () => {
+          addToCart("3-in-1 Magnetic USB Cable", 19.99);
+        });
+
+      updateCartIcon();
+      updateAuthUI();
+    });
+
+
+	// Show welcome message if logged in
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1])); // decode JWT
+      const email = payload.email;
+      document.getElementById('welcome-banner').textContent = `Welcome, ${email}!`;
+	async function fetchOrders() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  try {
+    const res = await fetch('http://localhost:5000/api/orders', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) throw new Error('Failed to fetch orders');
+    const orders = await res.json();
+
+    if (orders.length === 0) return;
+
+    document.getElementById('order-history').style.display = 'block';
+    const list = document.getElementById('orders-list');
+    list.innerHTML = '';
+
+    orders.forEach(order => {
+      const date = new Date(order.createdAt).toLocaleString();
+      const li = document.createElement('li');
+      li.style.marginBottom = '15px';
+      li.innerHTML = `
+        <strong>Order Total:</strong> $${order.total.toFixed(2)}<br>
+        <strong>Date:</strong> ${date}<br>
+        <strong>Items:</strong>
+        <ul>
+          ${order.items.map(i => `<li>${i.name} x ${i.quantity}</li>`).join('')}
+        </ul>
+      `;
+      list.appendChild(li);
+    });
+  } catch (err) {
+    console.error('Order fetch error:', err);
+  }
+}
+
+// Fetch orders on load
+document.addEventListener('DOMContentLoaded', fetchOrders);
+    } catch (e) {
+      console.error("Invalid token:", e);
+    }
+  }
+});
+
+async function fetchOrders() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  try {
+    const res = await fetch('http://localhost:5000/api/orders', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+
+    const orders = await res.json();
+    if (!orders.length) return;
+
+    // Show order history section
+    document.getElementById('order-history').style.display = 'block';
+    const list = document.getElementById('orders-list');
+    list.innerHTML = ''; // clear any previous orders
+
+    orders.forEach(order => {
+      const date = new Date(order.createdAt).toLocaleString();
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <strong>Order Total:</strong> $${order.total.toFixed(2)}<br>
+        <strong>Date:</strong> ${date}<br>
+        <strong>Items:</strong>
+        <ul>
+          ${order.items.map(i => `<li>${i.name} x ${i.quantity}</li>`).join('')}
+        </ul>
+      `;
+      list.appendChild(li);
+    });
+  } catch (err) {
+    console.error('Error fetching orders:', err);
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem('token'); // Check if user is logged in (i.e., has a token)
+
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token to get the user email
+      const email = payload.email;
+      document.getElementById('welcome-banner').textContent = `Welcome, ${email}!`; // Display welcome message
+
+      // Fetch and display the user's orders
+      fetchOrders(); // This line fetches the order history
+    } catch (e) {
+      console.error("Invalid token:", e); // Handle any errors decoding the token
+    }
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem('token'); // Check if user is logged in (i.e., has a token)
+
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token to get the user email
+      const email = payload.email;
+      document.getElementById('welcome-banner').textContent = `Welcome, ${email}!`; // Display welcome message
+
+      // Fetch and display the user's orders
+      fetchOrders(); // This line fetches the order history
+    } catch (e) {
+      console.error("Invalid token:", e); // Handle any errors decoding the token
+    }
+  }
+});
+
+  </script>
+</body>
+</html>
